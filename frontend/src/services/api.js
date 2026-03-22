@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8080/api';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -8,6 +8,36 @@ const api = axios.create({
     'Content-Type': 'application/json',
   },
 });
+
+// Add request interceptor for debugging
+api.interceptors.request.use(
+  (config) => {
+    console.log(`Making ${config.method?.toUpperCase()} request to: ${config.baseURL}${config.url}`);
+    return config;
+  },
+  (error) => {
+    console.error('Request error:', error);
+    return Promise.reject(error);
+  }
+);
+
+// Add response interceptor for debugging
+api.interceptors.response.use(
+  (response) => {
+    console.log(`Response received: ${response.status} from ${response.config.url}`);
+    return response;
+  },
+  (error) => {
+    console.error('Response error:', error.message);
+    if (error.response) {
+      console.error('Status:', error.response.status);
+      console.error('Data:', error.response.data);
+    } else if (error.request) {
+      console.error('No response received:', error.request);
+    }
+    return Promise.reject(error);
+  }
+);
 
 // Client API calls
 export const getClients = () => api.get('/clients');

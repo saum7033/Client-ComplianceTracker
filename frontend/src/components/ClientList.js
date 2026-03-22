@@ -1,12 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { getClients } from '../services/api';
-import { Users, Building2, Globe } from 'lucide-react';
+import { getClients, createClient } from '../services/api';
+import { Users, Building2, Globe, Plus, X } from 'lucide-react';
 import './ClientList.css';
 
 const ClientList = ({ onClientSelect, selectedClientId }) => {
   const [clients, setClients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showAddForm, setShowAddForm] = useState(false);
+
+  // Form state for adding new client
+  const [newClient, setNewClient] = useState({
+    companyName: '',
+    country: '',
+    entityType: ''
+  });
 
   useEffect(() => {
     fetchClients();
@@ -16,14 +24,45 @@ const ClientList = ({ onClientSelect, selectedClientId }) => {
     try {
       setLoading(true);
       const response = await getClients();
+      console.log('Clients data received:', response.data);
       setClients(response.data);
       setError(null);
     } catch (err) {
-      setError('Failed to fetch clients');
+      let errorMessage = 'Failed to fetch clients';
+      if (err.response) {
+        errorMessage = `Server error: ${err.response.status} - ${err.response.data?.message || 'Unknown error'}`;
+      } else if (err.request) {
+        errorMessage = 'Network error - unable to reach server. Is the backend running on port 8080?';
+      } else {
+        errorMessage = `Request error: ${err.message}`;
+      }
+      setError(errorMessage);
       console.error('Error fetching clients:', err);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleAddClient = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await createClient(newClient);
+      console.log('Client created:', response.data);
+      setClients([...clients, response.data]);
+      setShowAddForm(false);
+      setNewClient({ companyName: '', country: '', entityType: '' });
+      onClientSelect(response.data.id);
+    } catch (err) {
+      console.error('Error creating client:', err);
+      alert('Failed to create client. Please try again.');
+    }
+  };
+
+  const handleInputChange = (e) => {
+    setNewClient({
+      ...newClient,
+      [e.target.name]: e.target.value
+    });
   };
 
   if (loading) {
@@ -91,7 +130,12 @@ const ClientList = ({ onClientSelect, selectedClientId }) => {
           </div>
           <h3 className="client-list-empty-title">No clients found</h3>
           <p className="client-list-empty-text">Add your first client to get started</p>
-          <button className="client-list-empty-button">Add First Client</button>
+          <button 
+            className="client-list-empty-button"
+            onClick={() => setShowAddForm(true)}
+          >
+            Add First Client
+          </button>
         </div>
       ) : (
         <div className="client-list-cards">
@@ -142,6 +186,80 @@ const ClientList = ({ onClientSelect, selectedClientId }) => {
               <div className="client-card-hover-effect"></div>
             </div>
           ))}
+        </div>
+      )}
+      
+      {/* Add Client Form Modal */}
+      {showAddForm && (
+        <div className="client-add-form-overlay">
+          <div className="client-add-form-container">
+            <div className="client-add-form-header">
+              <h3 className="client-add-form-title">Add New Client</h3>
+              <button 
+                className="client-add-form-close"
+                onClick={() => setShowAddForm(false)}
+              >
+                <X size={16} />
+              </button>
+            </div>
+            
+            <form onSubmit={handleAddClient} className="client-add-form">
+              <div className="client-add-form-group">
+                <label className="client-add-form-label">Company Name *</label>
+                <input
+                  type="text"
+                  name="companyName"
+                  value={newClient.companyName}
+                  onChange={handleInputChange}
+                  required
+                  className="client-add-form-input"
+                  placeholder="Enter company name"
+                />
+              </div>
+              
+              <div className="client-add-form-group">
+                <label className="client-add-form-label">Country *</label>
+                <input
+                  type="text"
+                  name="country"
+                  value={newClient.country}
+                  onChange={handleInputChange}
+                  required
+                  className="client-add-form-input"
+                  placeholder="Enter country"
+                />
+              </div>
+              
+              <div className="client-add-form-group">
+                <label className="client-add-form-label">Entity Type *</label>
+                <input
+                  type="text"
+                  name="entityType"
+                  value={newClient.entityType}
+                  onChange={handleInputChange}
+                  required
+                  className="client-add-form-input"
+                  placeholder="e.g., Corporation, LLC, Partnership"
+                />
+              </div>
+              
+              <div className="client-add-form-actions">
+                <button
+                  type="button"
+                  className="client-add-form-button client-add-form-button-cancel"
+                  onClick={() => setShowAddForm(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="client-add-form-button client-add-form-button-submit"
+                >
+                  Add Client
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
     </div>

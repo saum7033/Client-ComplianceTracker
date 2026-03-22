@@ -1,0 +1,45 @@
+// Compliance Tracker Database Schema
+// Mini Compliance Tracker for LedgersCFO
+
+Table clients {
+  id integer [primary key]
+  company_name varchar [not null]
+  country varchar [not null]
+  entity_type varchar [not null]
+  created_at timestamp [default: 'now()']
+}
+
+Table compliance_tasks {
+  id integer [primary key]
+  client_id integer [not null]
+  title varchar [not null]
+  description text
+  category varchar [not null]
+  due_date date [not null]
+  status varchar [not null, note: 'Pending, In Progress, Completed, Overdue']
+  priority varchar [not null, note: 'High, Medium, Low']
+  created_at timestamp [default: 'now()']
+  updated_at timestamp [default: 'now()']
+}
+
+// Relationships
+Ref client_tasks: compliance_tasks.client_id > clients.id // many-to-one
+
+// Sample data
+Records clients(id, company_name, country, entity_type) {
+  1, 'TechCorp Inc.', 'United States', 'LLC'
+  2, 'Global Finance Ltd.', 'United Kingdom', 'Limited'
+  3, 'Startup Ventures', 'Canada', 'Corporation'
+  4, 'Manufacturing Co.', 'Germany', 'GmbH'
+}
+
+Records compliance_tasks(id, client_id, title, category, due_date, status, priority) {
+  1, 1, 'Annual Tax Filing 2024', 'Tax', '2024-03-15', 'Pending', 'High'
+  2, 1, 'Quarterly Financial Report', 'Financial', '2024-02-28', 'In Progress', 'Medium'
+  3, 2, 'VAT Return Q1', 'Tax', '2024-04-07', 'Pending', 'High'
+  4, 2, 'Annual Compliance Review', 'Compliance', '2024-06-30', 'Pending', 'Medium'
+  5, 3, 'Board Meeting Minutes', 'Corporate', '2024-01-15', 'Completed', 'Low'
+  6, 3, 'Shareholder Report', 'Corporate', '2024-03-31', 'Pending', 'Medium'
+  7, 4, 'Annual Audit', 'Audit', '2024-12-31', 'Pending', 'High'
+  8, 4, 'Environmental Compliance', 'Regulatory', '2024-03-01', 'Overdue', 'High'
+}

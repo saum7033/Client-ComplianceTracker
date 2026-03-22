@@ -356,16 +356,140 @@
 /* Hover Effect */
 .client-card-hover-effect {
   position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, rgb(119 141 169), transparent, rgb(27 38 59));
-  opacity: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgb(119 141 169 / 0.1), rgb(27 38 59 / 0.1));
   border-radius: 0.75rem;
+  opacity: 0;
   transition: opacity 0.3s ease;
-  pointer-events: none;
 }
 
 .client-card:hover .client-card-hover-effect {
-  opacity: 0.1;
+  opacity: 1;
+}
+
+/* Add Client Form Modal */
+.client-add-form-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.client-add-form-container {
+  background-color: rgb(27 38 59);
+  border: 1px solid rgb(65 90 119);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3);
+}
+
+.client-add-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.client-add-form-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: rgb(224 225 221);
+  margin: 0;
+}
+
+.client-add-form-close {
+  background: none;
+  border: none;
+  color: rgb(119 141 169);
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  transition: all 0.2s ease;
+}
+
+.client-add-form-close:hover {
+  background-color: rgb(65 90 119);
+  color: rgb(224 225 221);
+}
+
+.client-add-form-group {
+  margin-bottom: 1rem;
+}
+
+.client-add-form-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgb(224 225 221);
+  margin-bottom: 0.5rem;
+}
+
+.client-add-form-input {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: rgb(15 23 42);
+  border: 1px solid rgb(65 90 119);
+  border-radius: 0.5rem;
+  color: rgb(224 225 221);
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+}
+
+.client-add-form-input:focus {
+  outline: none;
+  border-color: rgb(119 141 169);
+  box-shadow: 0 0 0 3px rgb(119 141 169 / 0.1);
+}
+
+.client-add-form-input::placeholder {
+  color: rgb(119 141 169);
+}
+
+.client-add-form-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.client-add-form-button {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.client-add-form-button-cancel {
+  background-color: rgb(65 90 119);
+  color: rgb(224 225 221);
+}
+
+.client-add-form-button-cancel:hover {
+  background-color: rgb(119 141 169);
+}
+
+.client-add-form-button-submit {
+  background-color: rgb(119 141 169);
+  color: rgb(224 225 221);
+}
+
+.client-add-form-button-submit:hover {
+  background-color: rgb(148 163 184);
 }
 
 /* Animations */

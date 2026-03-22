@@ -35,12 +35,23 @@ const AddTaskForm = ({ clientId, onTaskAdded }) => {
         priority: formData.priority
       };
 
-      await createTask(taskData);
+      console.log('Creating task with data:', taskData);
+      const response = await createTask(taskData);
+      console.log('Task created successfully:', response.data);
+      
       onTaskAdded();
       resetForm();
       setShowForm(false);
     } catch (err) {
-      setError('Failed to create task');
+      let errorMessage = 'Failed to create task';
+      if (err.response) {
+        errorMessage = `Server error: ${err.response.status} - ${err.response.data?.message || JSON.stringify(err.response.data) || 'Unknown error'}`;
+      } else if (err.request) {
+        errorMessage = 'Network error - unable to reach server. Is the backend running on port 8080?';
+      } else {
+        errorMessage = `Request error: ${err.message}`;
+      }
+      setError(errorMessage);
       console.error('Error creating task:', err);
     } finally {
       setLoading(false);

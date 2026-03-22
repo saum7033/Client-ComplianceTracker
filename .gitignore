@@ -1,0 +1,118 @@
+# CTMS Project - Root .gitignore (Handles both Frontend and Backend)
+
+# ============= FRONTEND (REACT) =============
+# Dependencies
+frontend/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Production builds
+frontend/build/
+frontend/dist/
+
+# Frontend cache and temp files
+frontend/.cache/
+frontend/.parcel-cache/
+frontend/.eslintcache
+frontend/.nyc_output
+frontend/coverage/
+frontend/.out
+frontend/.storybook-out
+
+# ============= BACKEND (SPRING BOOT/MAVEN) =============
+# Maven build outputs
+backend/target/
+backend/pom.xml.tag
+backend/pom.xml.releaseBackup
+backend/pom.xml.versionsBackup
+backend/pom.xml.next
+backend/release.properties
+backend/dependency-reduced-pom.xml
+backend/buildNumber.properties
+backend/.mvn/timing.properties
+
+# Spring Boot specific
+backend/HELP.md
+backend/application-*.properties
+backend/application-*.yml
+!backend/application.example.properties
+!backend/application.example.yml
+
+# ============= SHARED PROJECT FILES =============
+# Environment variables (CRITICAL - Never commit these)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+backend/.env
+frontend/.env
+
+# IDE and Editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.iws
+*.iml
+*.ipr
+
+# STS/Eclipse
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# ============= OS GENERATED FILES =============
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ============= LOGS AND TEMP FILES =============
+*.log
+logs/
+tmp/
+temp/
+*.tmp
+*.temp
+
+# ============= DATABASE FILES =============
+*.db
+*.sqlite
+*.sqlite3
+
+# ============= RUNTIME DATA =============
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# ============= OPTIONAL CACHE DIRECTORIES =============
+.npm
+.yarn-integrity
+.node_repl_history
+
+# ============= APPLICATION SPECIFIC =============
+uploads/
+static/uploads/
+
+# ============= BUILD ARTIFACTS =============
+*.tgz
+*.jar
+*.war

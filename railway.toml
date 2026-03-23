@@ -1,16 +1,20 @@
 [project]
-name = "ctms-database"
+name = "ctms-app"
 
-[services]
-  [[services.database]]
-    name = "ctms-postgres"
-    user = "ctms_user"
-    password = "ctms_secure_password"
-    dbname = "CTMS"
-    port = 5432
-    
+[[services]]
+name = "ctms-backend"
+source = "."
+builder = "NIXPACKS"
+
+[services.variables]
+JAVA_OPTS = "-Xmx512m"
+
 [deploy]
 healthcheckPath = "/api/clients"
 healthcheckTimeout = 100
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 10
+
+# Database service (already exists)
+[[services.database]]
+name = "ctms-postgres"

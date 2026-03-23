@@ -1,5 +1,5 @@
 # Use Maven image to build the Spring Boot application
-FROM maven:3.9-openjdk-17 AS build
+FROM maven:3.8.6-openjdk-17 AS build
 
 WORKDIR /app
 
@@ -12,7 +12,7 @@ WORKDIR /app/backend
 RUN mvn clean package -DskipTests
 
 # Use OpenJDK 17 runtime image
-FROM openjdk:17-jdk-slim
+FROM openjdk:17-alpine
 
 WORKDIR /app
 

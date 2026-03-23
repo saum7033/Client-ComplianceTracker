@@ -5,6 +5,8 @@ name = "ctms-app"
 name = "ctms-backend"
 source = "backend"
 builder = "NIXPACKS"
+buildCommand = "./mvnw clean package -DskipTests"
+startCommand = "java -jar target/backend-0.0.1-SNAPSHOT.jar"
 
 [services.variables]
 JAVA_OPTS = "-Xmx512m"

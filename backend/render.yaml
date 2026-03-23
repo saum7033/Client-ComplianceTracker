@@ -1,0 +1,19 @@
+services:
+  # Spring Boot Backend Service
+  - type: web
+    name: ctms-backend
+    env: java
+    plan: free
+    buildCommand: "./mvnw clean package -DskipTests"
+    startCommand: "java -jar target/backend-0.0.1-SNAPSHOT.jar"
+    envVars:
+      - key: DB_URL
+        value: postgresql://postgres:VMFAbjsutWsrDySptrMsvlTbmZAErkGE@postgres.railway.internal:5432/railway
+      - key: DB_USERNAME
+        value: postgres
+      - key: DB_PASSWORD
+        value: VMFAbjsutWsrDySptrMsvlTbmZAErkGE
+      - key: JAVA_OPTS
+        value: "-Xmx512m"
+    healthCheckPath: /api/clients
+    autoDeploy: true

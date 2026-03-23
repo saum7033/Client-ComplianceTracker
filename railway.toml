@@ -1,0 +1,16 @@
+[project]
+name = "ctms-database"
+
+[services]
+  [[services.database]]
+    name = "ctms-postgres"
+    user = "ctms_user"
+    password = "ctms_secure_password"
+    dbname = "CTMS"
+    port = 5432
+    
+[deploy]
+healthcheckPath = "/api/clients"
+healthcheckTimeout = 100
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 10

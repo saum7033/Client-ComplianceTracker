@@ -10,14 +10,6 @@ builder = "NIXPACKS"
 JAVA_OPTS = "-Xmx512m"
 PORT = "8080"
 
-[[services]]
-name = "ctms-frontend"
-source = "frontend"
-builder = "NIXPACKS"
-
-[services.variables]
-PORT = "3000"
-
 [deploy]
 healthcheckPath = "/api/clients"
 healthcheckTimeout = 100

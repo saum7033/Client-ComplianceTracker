@@ -1,7 +1,10 @@
 # Use Maven image to build the Spring Boot application
-FROM maven:3.8.6-openjdk-17 AS build
+FROM eclipse-temurin:17-jdk-alpine AS build
 
 WORKDIR /app
+
+# Install Maven
+RUN apk add --no-cache maven
 
 # Copy pom.xml first for better Docker layer caching
 COPY backend/pom.xml ./backend/
@@ -11,8 +14,8 @@ COPY backend/src ./backend/src
 WORKDIR /app/backend
 RUN mvn clean package -DskipTests
 
-# Use OpenJDK 17 runtime image
-FROM openjdk:17-alpine
+# Use Eclipse Temurin 17 runtime image
+FROM eclipse-temurin:17-jre-alpine
 
 WORKDIR /app
 

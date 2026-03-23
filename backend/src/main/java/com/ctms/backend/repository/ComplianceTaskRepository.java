@@ -19,11 +19,4 @@ public interface ComplianceTaskRepository extends JpaRepository<ComplianceTask, 
     
     @Query("SELECT t FROM ComplianceTask t WHERE t.client.id = :clientId AND t.dueDate < :currentDate AND t.status != 'COMPLETED'")
     List<ComplianceTask> findOverdueTasks(@Param("clientId") Long clientId, @Param("currentDate") LocalDate currentDate);
-    
-    @Query("SELECT t FROM ComplianceTask t WHERE t.dueDate < :currentDate AND t.status != 'COMPLETED'")
-    List<ComplianceTask> findAllOverdueTasks(@Param("currentDate") LocalDate currentDate);
-    
-    List<ComplianceTask> findByStatus(TaskStatus status);
-    List<ComplianceTask> findByCategory(String category);
-    List<ComplianceTask> findByStatusAndCategory(TaskStatus status, String category);
 }

@@ -22,12 +22,6 @@ public class ComplianceTaskService {
     private final ComplianceTaskRepository taskRepository;
     private final ClientRepository clientRepository;
     
-    public List<ComplianceTaskDto> getTasksForClient(Long clientId) {
-        return taskRepository.findByClientId(clientId).stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
-    }
-    
     public List<ComplianceTaskDto> getTasksForClientWithFilters(Long clientId, String status, String category) {
         List<ComplianceTask> tasks;
         

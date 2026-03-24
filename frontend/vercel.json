@@ -10,26 +10,17 @@
       }
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/(.*)",
-      "dest": "https://Client-ComplianceTracker.railway.app/api/$1",
-      "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+      "source": "/api/(.*)",
+      "destination": "https://Client-ComplianceTracker.railway.app/api/$1"
     },
     {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ],
   "env": {
     "REACT_APP_API_BASE_URL": "/api"
-  },
-  "build": {
-    "env": {
-      "REACT_APP_API_BASE_URL": "/api"
-    }
-  },
-  "functions": {},
-  "regions": ["iad1"],
-  "framework": "create-react-app"
+  }
 }

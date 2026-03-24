@@ -17,3 +17,5 @@ spring:
     open-in-view: false
     defer-datasource-initialization: true
 
+server:
+  port: ${PORT:8080}

@@ -3,8 +3,8 @@ name = "ctms-app"
 
 [[services]]
 name = "ctms-backend"
-source = "backend"
-builder = "NIXPACKS"
+source = "."
+builder = "DOCKERFILE"
 
 [services.variables]
 JAVA_OPTS = "-Xmx512m"
@@ -12,7 +12,6 @@ PORT = "8080"
 
 [deploy]
 healthcheckPath = "/"
-healthcheckTimeout = 100
+healthcheckTimeout = 300
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 10
-

@@ -1,11 +1,11 @@
-# Cloud Deployment Guide - Render + Vercel + Railway
+# Cloud Deployment Guide - Railway + Vercel
 
 ## Architecture Overview
 - **Frontend**: Vercel (React app)
-- **Backend**: Render (Spring Boot API)
+- **Backend**: Railway (Spring Boot API)
 - **Database**: Railway (PostgreSQL)
 
-## Step 1: Set Up Railway Database
+## Step 1: Railway Database Setup
 
 1. **Create Railway Account**
    - Go to [railway.app](https://railway.app)
@@ -14,42 +14,29 @@
 2. **Create PostgreSQL Database**
    - Click "New Project" → "Provision PostgreSQL"
    - Choose "PostgreSQL" template
-   - Name it: `ctms-database`
+   - Railway automatically generates `PGHOST`, `PGPORT`, `PGDATABASE`, `PGUSER`, `PGPASSWORD`
 
-3. **Get Database Credentials**
-   - Go to your database service
-   - Click "Connect" tab
-   - Copy the DATABASE_URL
-   - Note the connection details
+## Step 2: Deploy Backend to Railway
 
-## Step 2: Deploy Backend to Render
+1. **Connect Repository**
+   - In Railway, click "New Project" → "Deploy from GitHub"
+   - Select your `CTMS` repository
+   - Railway automatically detects `railway.toml` in root directory
 
-1. **Create Render Account**
-   - Go to [render.com](https://render.com)
-   - Sign up with GitHub
+2. **Configure Service**
+   - **Service Name**: `ctms-backend`
+   - **Root Directory**: `backend` (configured in railway.toml)
+   - Railway automatically sets Java environment
 
-2. **Connect Repository**
-   - Click "New" → "Web Service"
-   - Connect your GitHub repository
-   - Select the `CTMS` repository
+3. **Environment Variables**
+   - Railway automatically injects: `PGHOST`, `PGPORT`, `PGDATABASE`, `PGUSER`, `PGPASSWORD`
+   - Your `application.yaml` automatically picks these up
+   - Set: `PORT=8080` (for health checks)
 
-3. **Configure Service**
-   - **Name**: `ctms-backend`
-   - **Environment**: `Docker`
-   - **Root Directory**: `backend`
-   - **Plan**: Free
-   - **Add Environment Variables**:
-     ```
-     DB_URL=your_railway_database_url
-     DB_USERNAME=your_railway_username
-     DB_PASSWORD=your_railway_password
-     JAVA_OPTS=-Xmx512m
-     ```
-
-4. **Deploy Settings**
-   - **Build Command**: `./mvnw clean package -DskipTests`
-   - **Start Command**: `java -jar target/backend-0.0.1-SNAPSHOT.jar`
-   - **Health Check Path**: `/api/clients`
+4. **Get Backend URL**
+   - Once deployed, Railway provides a public URL
+   - Example: `https://ctms-production.up.railway.app`
+   - Copy this for Vercel configuration
 
 ## Step 3: Deploy Frontend to Vercel
 
@@ -69,35 +56,36 @@
    - **Install Command**: `npm install --legacy-peer-deps`
 
 4. **Environment Variables**
-   - Add: `REACT_APP_API_BASE_URL=/api`
+   - `REACT_APP_API_BASE_URL=/api` (uses Vercel rewrites to proxy)
 
-5. **Update Backend URL**
-   - In `frontend/vercel.json`, update the backend URL:
-   ```json
-   "dest": "https://your-render-app-url.onrender.com/api/$1"
-   ```
+## Step 4: Update vercel.json
 
-## Step 4: Update Vercel Routes
+Update `frontend/vercel.json` with your Railway backend URL:
 
-After deploying your backend to Render:
+```json
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://YOUR-RAILWAY-URL/api/$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
+```
 
-1. **Get Backend URL**
-   - Go to your Render dashboard
-   - Copy your backend URL (e.g., `https://ctms-backend.onrender.com`)
+Replace `YOUR-RAILWAY-URL` with your actual Railway backend URL.
 
-2. **Update vercel.json**
-   ```json
-   {
-     "routes": [
-       {
-         "src": "/api/(.*)",
-         "dest": "https://ctms-backend.onrender.com/api/$1"
-       }
-     ]
-   }
-   ```
+## Deployment Flow
 
-3. **Redeploy Frontend**
+1. Push to GitHub
+2. Railway automatically builds & deploys backend
+3. Vercel automatically builds & deploys frontend
+4. Frontend requests to `/api/*` are proxied to Railway backend
+5. Database connections handled automatically by Railway environment variables
    - Push changes to GitHub
    - Vercel will automatically redeploy
 

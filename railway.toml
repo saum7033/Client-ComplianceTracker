@@ -11,11 +11,8 @@ JAVA_OPTS = "-Xmx512m"
 PORT = "8080"
 
 [deploy]
-healthcheckPath = "/api/clients"
+healthcheckPath = "/"
 healthcheckTimeout = 100
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 10
 
-# Database service (already exists)
-[[services.database]]
-name = "ctms-postgres"

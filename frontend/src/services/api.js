@@ -42,21 +42,27 @@ api.interceptors.response.use(
 );
 
 // Client API calls
-export const getClients = () => api.get('/clients');
-export const getClientById = (id) => api.get(`/clients/${id}`);
-export const createClient = (clientData) => api.post('/clients', clientData);
+export const getClients = () => api.get('/api/clients');
+export const getClientById = (id) => api.get(`/api/clients/${id}`);
+export const createClient = (clientData) => api.post('/api/clients', clientData);
 
 // Task API calls
 export const getTasksForClient = (clientId, status = null, category = null) => {
   const params = new URLSearchParams();
   if (status) params.append('status', status);
   if (category) params.append('category', category);
-  return api.get(`/tasks/client/${clientId}?${params.toString()}`);
+  return api.get(`/api/tasks/client/${clientId}?${params.toString()}`);
 };
 
-export const getOverdueTasksForClient = (clientId) => api.get(`/tasks/client/${clientId}/overdue`);
-export const createTask = (taskData) => api.post('/tasks', taskData);
-export const updateTaskStatus = (taskId, status) => api.put(`/tasks/${taskId}/status?status=${status}`);
-export const deleteTask = (taskId) => api.delete(`/tasks/${taskId}`);
+export const getOverdueTasksForClient = (clientId) =>
+  api.get(`/api/tasks/client/${clientId}/overdue`);
+
+export const createTask = (taskData) => api.post('/api/tasks', taskData);
+
+export const updateTaskStatus = (taskId, status) =>
+  api.put(`/api/tasks/${taskId}/status?status=${status}`);
+
+export const deleteTask = (taskId) =>
+  api.delete(`/api/tasks/${taskId}`);
 
 export default api;

@@ -9,6 +9,7 @@ import org.springframework.web.cors.*;
 import java.util.List;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 
     @Bean
